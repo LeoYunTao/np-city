@@ -1,4 +1,5 @@
 import random
+from map import Map
 # Display Welcome statement
 
 # 1. Display main menu
@@ -17,7 +18,9 @@ def startGame():
     #generateList()
     #generateMap()
     # 2.3.2. Display game menu
+    map = Map(20, 20)
     while(True):
+        map.draw_map()
         print("\n1 Build a building\n2 Save Game\n3 See High Scores\n0 Exit Game")
         
     # 2.3.3. Process game menu choice (You can use a function here)

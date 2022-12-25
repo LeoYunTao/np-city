@@ -7,7 +7,7 @@ class Map:
     
     def draw_map(self):
         for row in range(len(self.map)):
-            print("====" * len(self.map) + "=")
+            print("----" * len(self.map) + "-")
             for column in range(len(self.map[0])):
                 if column == 0:
                     print("|", end="")
@@ -16,4 +16,4 @@ class Map:
                 if current_building is None:
                     print("   ", end="|")
             print()
-        print("====" * len(self.map) + "=")
+        print("----" * len(self.map) + "-")

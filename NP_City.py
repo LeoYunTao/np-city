@@ -3,8 +3,8 @@ from building import Building
 from building import Residential
 from building import Industry
 from building import Commercial
-#from building import Park
-from building import Building
+from building import Park
+from building import Road
 from map import Map
 # Display Welcome statement
 
@@ -20,21 +20,30 @@ def mainmenu():
             print("Please type in an integer!")
 
             
-
+            
 def buildBuilding(choices, turn, map):
     bType = choices[0]
     if bType == "R":
         bPlace = Residential()
+        map = map()
         pass
         
     elif bType == "I":
+        bPlace = Industry()
         pass
+    
     elif bType == "C":
+        bPlace = Commercial
         pass
+    
     elif bType == "O":
+        bPlace = Park()
         pass
+    
     elif bType == "*":
+        bPlace = Road()
         pass
+    
     else:
         print("Error!")
     return
@@ -108,7 +117,8 @@ def playGame(turn):
                
             # 2.3.8. Save game
             elif sgChoice == 2:
-                turn += 1
+                savefile = open("./map.csv", "w")
+                savefile.write(str(map))
                 pass
             # 2.3.7. Display high scores
             elif sgChoice == 3:

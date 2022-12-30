@@ -1,28 +1,92 @@
 class Building:  
-    def __init__(self, buildRow, buildCol, buildingPoints = 0):
-        self.buildRow = buildRow
-        self.buildCol = buildCol
+    def __init__(self, location, buildingPoints = 0):
+        self.location = location
         self.buildingPoints = buildingPoints
-    
-    
-
-    pass
 
 class Residential(Building):
-    pass
+    def __init__(self, location, buildingPoints=0):
+        super().__init__(location, buildingPoints)
+
+        self.name = "RES"
 
 class Industry(Building):
-    pass
+    def __init__(self, location, buildingPoints=0):
+        super().__init__(location, buildingPoints)
+
+        self.name = "IND"
 
 class Commercial(Building):
-    pass
+    def __init__(self, location, buildingPoints=0):
+        super().__init__(location, buildingPoints)
+        
+        self.name = "COM"
 
 class Park(Building):
-    pass
+    def __init__(self, location, buildingPoints=0):
+        super().__init__(location, buildingPoints)
+        
+        self.name = "PRK"
 
 class Road(Building):
-    pass
+    def __init__(self, location, buildingPoints=0):
+        super().__init__(location, buildingPoints)
+        
+        self.name = "ROA"
 
+class BuildingUtils:
+    @staticmethod
+    def choosePosition(map):
 
+        buildErrorMsg = "Please type in a valid position map!"
 
+        while True: # Check position
+            pChoice = input("Select a position e.g A, 3: ").upper().split(",")
+
+            pChoice = [i.strip() for i in pChoice] # remove trailing white spaces
+
+            if len(pChoice) != 2:
+                print(buildErrorMsg)
+                continue
+
+            if not pChoice[0].isalpha() or not pChoice[1].isdigit():
+                print(buildErrorMsg)
+                continue
+            
+            pChoice[1] = int(pChoice[1])
+            pChoice = tuple(pChoice)
+            
+            if not map.is_location_empty(pChoice):
+                print("Buildings already exists")
+                continue
+            
+            if len(map.map) > 0 and not map.has_adjecent_building(pChoice):
+                print("No Adjecent Building")
+                continue
+
+            return pChoice
+                
+    @staticmethod
+    def buildBuilding(building, map):
+        map.add_building(building)
+
+    @staticmethod
+    def selectBuilding(buildingDict, map):
+
+        while True: # Check building type
+
+            print("\n".join([f"({key}) {value.__name__}" for key, value in buildingDict.items()]))
+
+            bChoice = input("\nYour choice: ").upper()
+
+            if bChoice not in buildingDict:
+                print("Please type in a valid building!")
+                continue
+
+            #map.draw_map()
+            
+            print("You have selected: " + buildingDict[bChoice].__name__)
+            
+            position = BuildingUtils.choosePosition(map)
+
+            return buildingDict[bChoice](position)
 

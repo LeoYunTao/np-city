@@ -7,13 +7,10 @@ class Map:
         self.map = {}
     
     def draw_map(self):
-<<<<<<< Updated upstream
         header_col = [chr(i+65) for i in range(self.column)]
         for y in header_col:
             print(" ", y, end=' ')
         print()
-=======
->>>>>>> Stashed changes
         for row in range(1, self.row+1):
             print("----" * self.row + "-")
             for column in [chr(i+65) for i in range(self.column)]:

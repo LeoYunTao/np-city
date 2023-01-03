@@ -17,7 +17,7 @@ class GameManager():
         while True:
             map.draw_map()
             print("Turn Number: " + str(turn))
-            print("\n1 Build a building\n2 Save Game\n3 See High Scores\n0 Exit Game")
+            print("\n1 Build a building\n2 Save Game\n3 See Current Score\n0 Exit Game")
 
             # 2.3.3. Process game menu choice (You can use a function here)
             sgChoice = Utlis.get_int("\nYour choice: ")
@@ -33,10 +33,14 @@ class GameManager():
             # 2.3.8. Save game
             elif sgChoice == 2:
                 self.save_game()
-            # 2.3.7. Display high scores
             elif sgChoice == 3:
-                turn += 1
-                pass
+                score = 0
+                
+                for building in map.map.values():
+                    score += building.calculate_score(map)
+                    
+                print(f"Current Score: {score}")
+                
             elif sgChoice == 0:
                 return 0
             else:

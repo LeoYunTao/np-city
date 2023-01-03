@@ -7,21 +7,23 @@ class Map:
         self.map = {}
     
     def draw_map(self):
-        for row in range(1, self.row):
+        header_col = [chr(i+65) for i in range(self.column)]
+        for y in header_col:
+            print(" ", y, end=' ')
+        print()
+        for row in range(1, self.row+1):
             print("----" * self.row + "-")
             for column in [chr(i+65) for i in range(self.column)]:
                 if column == 'A':
                     print("|", end="")
-                    
+
                 if self.is_location_empty((column, row)):
                     print("   ", end="|")
                 else:
                     current_building = self.map[(column, row)]
                     print(current_building.name, end="|")
-
-            print()
+            print("",  row)
         print("----" * self.row + "-")
-        
     # location in format (x, y)
     def is_location_empty(self, location):
         return location not in self.map

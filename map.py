@@ -33,6 +33,14 @@ class Map:
         
     def get_building(self, location):
         return self.map[location]
+
+    #Count the number of one type of building
+    def count_building(self, building_name):
+        count = 0
+        for building in self.map.values():
+            if building.name == building_name.name:
+                count += 1
+        return count
     
     # check whether there is an adjecent building next to the location
     def has_adjecent_building(self, location):
@@ -54,5 +62,5 @@ class Map:
             BOTTOM_LOCATION: self.map.get(BOTTOM_LOCATION, None)
         }
 
-        #remove empty buildins
+        #remove empty buildings
         return {key:val for key, val in adjecent_buildings.items() if val is not None}

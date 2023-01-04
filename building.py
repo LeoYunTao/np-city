@@ -12,12 +12,32 @@ class Residential(Building):
 
         self.name = "RES"
 
+    def calculate_score(self, map):
+        points = 0
+        adjecent_buildings = map.get_adjecent_building(self.location)
+        for adjecent_building in adjecent_buildings.values():
+            if isinstance(adjecent_building, Residential) or isinstance(adjecent_building, Commercial):
+                points += 1
+            elif isinstance(adjecent_building, Park):
+                points += 2
+            elif isinstance(adjecent_building, Industry):
+                points = 1
+                break
+            
+        return points
+
 class Industry(Building):
     def __init__(self, location, buildingPoints=0):
         super().__init__(location, buildingPoints)
 
         self.name = "IND"
-
+        
+    def calculate_score(self, map):
+        points = 0
+        points = map.count_building(self)
+        return points
+         
+        
 class Commercial(Building):
     def __init__(self, location, buildingPoints=0):
         super().__init__(location, buildingPoints)

@@ -3,7 +3,10 @@ class Building:
         self.location = location
         self.buildingPoints = buildingPoints
     
-    def calculate_score(self):
+    def calculate_score(self, map):
+        return 0
+    
+    def calculate_coins(self, map):
         return 0
 
 class Residential(Building):
@@ -36,6 +39,10 @@ class Industry(Building):
         points = 0
         points = map.count_building(self)
         return points
+    
+    def calculate_coins(self, map):
+        return len([building for building in map.get_adjecent_building(self.location).values() \
+            if building.name == "RES"])
          
         
 class Commercial(Building):
@@ -45,8 +52,12 @@ class Commercial(Building):
         self.name = "COM"
         
     def calculate_score(self, map):
-        return len([building for building in map.get_adjacent_building(self.location).values() \
-            if building.name == self.name])
+        return len([building for building in map.get_adjecent_building(self.location).values() \
+            if building.name == self.name]) - 1
+        
+    def calculate_coins(self, map):
+        return len([building for building in map.get_adjecent_building(self.location).values() \
+            if building.name == "RES"])
 
 class Park(Building):
     def __init__(self, location, buildingPoints=0):

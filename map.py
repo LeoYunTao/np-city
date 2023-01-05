@@ -42,20 +42,20 @@ class Map:
                 count += 1
         return count
     
-    # check whether there is an adjecent building next to the location
-    def has_adjecent_building(self, location):
+    # check whether there is an adjacent building next to the location
+    def has_adjacent_building(self, location):
         return (chr(ord(location[0]) - 1), location[1]) in self.map or \
                 (location[0], location[1] - 1) in self.map or \
                 (chr(ord(location[0]) + 1), location[1]) in self.map or \
                 (location[0], location[1] + 1) in self.map
 
-    def get_adjecent_building(self, location):
+    def get_adjacent_building(self, location):
         LEFT_LOCATION = (chr(ord(location[0]) - 1), location[1])
         RIGHT_LOCATION = (chr(ord(location[0]) + 1), location[1])
         TOP_LOCATION = (location[0], location[1] - 1)
         BOTTOM_LOCATION = (location[0], location[1] + 1)
 
-        adjecent_buildings = {
+        adjacent_buildings = {
             LEFT_LOCATION: self.map.get(LEFT_LOCATION, None),
             TOP_LOCATION: self.map.get(TOP_LOCATION, None),
             RIGHT_LOCATION: self.map.get(RIGHT_LOCATION, None),
@@ -63,4 +63,4 @@ class Map:
         }
 
         #remove empty buildings
-        return {key:val for key, val in adjecent_buildings.items() if val is not None}
+        return {key:val for key, val in adjacent_buildings.items() if val is not None}

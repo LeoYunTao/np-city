@@ -14,13 +14,13 @@ class Residential(Building):
 
     def calculate_score(self, map):
         points = 0
-        adjecent_buildings = map.get_adjecent_building(self.location)
-        for adjecent_building in adjecent_buildings.values():
-            if isinstance(adjecent_building, Residential) or isinstance(adjecent_building, Commercial):
+        adjacent_buildings = map.get_adjacent_building(self.location)
+        for adjacent_building in adjacent_buildings.values():
+            if isinstance(adjacent_building, Residential) or isinstance(adjacent_building, Commercial):
                 points += 1
-            elif isinstance(adjecent_building, Park):
+            elif isinstance(adjacent_building, Park):
                 points += 2
-            elif isinstance(adjecent_building, Industry):
+            elif isinstance(adjacent_building, Industry):
                 points = 1
                 break
             
@@ -45,7 +45,7 @@ class Commercial(Building):
         self.name = "COM"
         
     def calculate_score(self, map):
-        return len([building for building in map.get_adjecent_building(self.location).values() \
+        return len([building for building in map.get_adjacent_building(self.location).values() \
             if building.name == self.name])
 
 class Park(Building):
@@ -55,7 +55,7 @@ class Park(Building):
         self.name = "PRK"
         
     def calculate_score(self, map):
-        return len([building for building in map.get_adjecent_building(self.location).values() \
+        return len([building for building in map.get_adjacent_building(self.location).values() \
             if building.name == self.name])
 
 class Road(Building):
@@ -65,7 +65,7 @@ class Road(Building):
         self.name = "ROA"
         
     def calculate_score(self, map):
-        count = 1
+        count = 0
         
         searched = []
         stack = [map.get_building(self.location)]
@@ -73,7 +73,7 @@ class Road(Building):
         while len(stack) > 0:
             current_building = stack.pop()
             
-            adjacent_buildings = map.get_adjecent_building(current_building.location).values()
+            adjacent_buildings = map.get_adjacent_building(current_building.location).values()
             
             for adjacent_building in adjacent_buildings:
                 if adjacent_building.location[1] != current_building.location[1]:
@@ -118,8 +118,8 @@ class BuildingUtils:
                 print("Buildings already exists")
                 continue
             
-            if len(map.map) > 0 and not map.has_adjecent_building(pChoice):
-                print("No Adjecent Building")
+            if len(map.map) > 0 and not map.has_adjacent_building(pChoice):
+                print("No Adjacent Building")
                 continue
 
             return pChoice

@@ -53,11 +53,14 @@ class GameManager():
     def load_game(self):
         pass
     
-    def highScores(self):
+    def highScores(self, building):
+
         # 4.1. Display high scores menu  
         # 4.2. Display high scores
         print("\nHigh scores\n-----------")
-    
+        with open('highscores.txt') as f:
+            for line in f:
+                print(line.strip())
     # 1. Display main menu
     def mainmenu(self):
         print("Welcome, mayor of NP City!\n--------------------------\n1 Start new game\n2 Load saved game\n3 Show high scores\n \n0 Exit Game")

@@ -2,6 +2,12 @@ class Building:
     def __init__(self, location, buildingPoints = 0):
         self.location = location
         self.buildingPoints = buildingPoints
+    
+    def calculate_score(self, map):
+        return 0
+    
+    def calculate_coins(self, map):
+        return 0
 
 class Residential(Building):
     def __init__(self, location, buildingPoints=0):
@@ -9,29 +15,93 @@ class Residential(Building):
 
         self.name = "RES"
 
+    def calculate_score(self, map):
+        points = 0
+        adjecent_buildings = map.get_adjecent_building(self.location)
+        for adjecent_building in adjecent_buildings.values():
+            if isinstance(adjecent_building, Residential) or isinstance(adjecent_building, Commercial):
+                points += 1
+            elif isinstance(adjecent_building, Park):
+                points += 2
+            elif isinstance(adjecent_building, Industry):
+                points = 1
+                break
+            
+        return points
+
 class Industry(Building):
     def __init__(self, location, buildingPoints=0):
         super().__init__(location, buildingPoints)
 
         self.name = "IND"
-
+        
+    def calculate_score(self, map):
+        points = 0
+        points = map.count_building(self)
+        return points
+    
+    def calculate_coins(self, map):
+        return len([building for building in map.get_adjecent_building(self.location).values() \
+            if building.name == "RES"])
+         
+        
 class Commercial(Building):
     def __init__(self, location, buildingPoints=0):
         super().__init__(location, buildingPoints)
         
         self.name = "COM"
+        
+    def calculate_score(self, map):
+        return len([building for building in map.get_adjecent_building(self.location).values() \
+            if building.name == self.name]) - 1
+        
+    def calculate_coins(self, map):
+        return len([building for building in map.get_adjecent_building(self.location).values() \
+            if building.name == "RES"])
 
 class Park(Building):
     def __init__(self, location, buildingPoints=0):
         super().__init__(location, buildingPoints)
         
         self.name = "PRK"
+        
+    def calculate_score(self, map):
+        return len([building for building in map.get_adjecent_building(self.location).values() \
+            if building.name == self.name])
 
 class Road(Building):
     def __init__(self, location, buildingPoints=0):
         super().__init__(location, buildingPoints)
         
         self.name = "ROA"
+        
+    def calculate_score(self, map):
+        count = 1
+        
+        searched = []
+        stack = [map.get_building(self.location)]
+        
+        while len(stack) > 0:
+            current_building = stack.pop()
+            
+            adjacent_buildings = map.get_adjecent_building(current_building.location).values()
+            
+            for adjacent_building in adjacent_buildings:
+                if adjacent_building.location[1] != current_building.location[1]:
+                    continue
+                
+                if adjacent_building.name != self.name:
+                    continue
+                
+                if adjacent_building in searched:
+                    continue
+                
+                stack.append(adjacent_building)
+                count += 1
+            
+            searched.append(current_building)
+            
+        return count
 
 class BuildingUtils:
     @staticmethod

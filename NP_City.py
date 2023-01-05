@@ -27,7 +27,7 @@ while (True):
         game_manager.load_game()
 
     elif mmChoice == 3:
-        game_manager.highScores()
+        game_manager.displayhighScores()
 
     elif mmChoice == 0:
         break

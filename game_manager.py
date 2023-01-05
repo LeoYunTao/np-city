@@ -1,23 +1,26 @@
 from map import Map
 from utlis import Utlis
 from building import *
-import csv
 
 class GameManager():
 
     def __init__(self, buildingDict):
         self.buildingDict = buildingDict
-        self.starting_coins = 16
+        self.starting_coins = 1
         self.current_coins = self.starting_coins
         self.map = Map(20, 20)
+        self.score = 0
 
     def playGame(self):
         # 2.3.1. Initialize game variables - Put running numbers in here
-        highscores = []
         # 2.3.2. Display game menu
-        while self.current_coins > 0 and (self.map.column * self.map.row) < 401 :
+        
+        turn = 0
+        while self.current_coins > 0 and (self.map.column * self.map.row) >= turn:
+            turn = len(self.map.map) + 1
+            
             self.map.draw_map()
-            print(f"Turn Number: {len(self.map.map) + 1}")
+            print(f"Turn Number: {turn}")
             print(f"Coins: {self.current_coins}")
             print("\n1 Build a building\n2 Save Game\n3 See Current Score\n0 Exit Game")
 
@@ -37,9 +40,9 @@ class GameManager():
             elif sgChoice == 2:
                 self.save_game()
             elif sgChoice == 3:
-                score = sum([building.calculate_score(self.map) for building in self.map.map.values()])
+                self.score = sum([building.calculate_score(self.map) for building in self.map.map.values()])
                     
-                print(f"Current Score: {score}")
+                print(f"Current Score: {self.score}")
                 
             elif sgChoice == 0:
                 return 0
@@ -49,24 +52,16 @@ class GameManager():
         #Endgame
         #Calculate finale score
 
-        score = sum([building.calculate_score(self.map) for building in self.map.map.values()])
-        if len(highscores) < 11:
+        name = input("Please enter your name (Max 20 characters) : ")
+        while len(name) > 20:
+            print("Name exceeded 20 characters!")
             name = input("Please enter your name (Max 20 characters) : ")
-            if len(name) > 20:
-                print("Name exceeded 20 characters!") 
-            else:
-                pass
 
         with open('leaderboard.csv','a') as csv_file:
-            csv_file.write("\n" + name + "," + str(score) + ",")
+            csv_file.write(name + "," + str(self.score) + "," + "\n")
             csv_file.close()
 
-
-        
-
-        
-
-
+        self.displayhighScores()
 
         
     def calculate_coins(self):
@@ -83,27 +78,29 @@ class GameManager():
     def displayhighScores(self):
         # 4.1. Display high scores menu  
         # 4.2. Display high scores
-        playername = []
-        highscores = []
+
+        highscores = [] # in format (score, playername)
         leaderboard = open("leaderboard.csv", "r")
-        board_list = leaderboard.read().split(",")
-        board_list.pop(-1)  # When saving the file a comma would added to the back of the list which would result in an empty string
-
-        for i in range(len(board_list)):
-            if i == 0:
-                playername.append(board_list[i].strip())
-
-            elif i % 2 == 0:
-                playername.append(board_list[i].strip())
-
-            else:
-                highscores.append(board_list[i])
+        
+        for line in leaderboard:
+            line = line.strip().split(",")
+            
+            if line == '':
+                break
+                        
+            highscores.append((line[1], line[0]))
+            
+        leaderboard.close()
+        
+        highscores = sorted(highscores, reverse=True)
 
         print("--------- HIGH SCORES ---------")
         print("{:<3} {:<22} {:<5}".format("Pos", "Player", "Score"))
         print("{:<3} {:<22} {:<5}".format("---", "------", "-----"))
-        for i in range(10):
-            print("{:>2}. {:<22} {:>5}".format(i + 1, playername[i] if i < len(playername) else "", highscores[i] if i < len(highscores) else ""))
+        for i in range(len(highscores)):
+            if i >= 10:
+                break
+            print("{:>2}. {:<22} {:>5}".format(i + 1, highscores[i][1] , highscores[i][0] ))
 
         print("-------------------------------")
 

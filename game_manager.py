@@ -6,7 +6,7 @@ class GameManager():
 
     def __init__(self, buildingDict):
         self.buildingDict = buildingDict
-        self.starting_coins = 1
+        self.starting_coins = 16
         self.current_coins = self.starting_coins
         self.map = Map(20, 20)
         self.score = 0

@@ -1,3 +1,7 @@
+import csv
+import ast
+
+import building
 from map import Map
 from utlis import Utlis
 from building import *
@@ -33,7 +37,7 @@ class GameManager():
 
                 # Second function builds the building on the map
                 BuildingUtils.buildBuilding(building, self.map)
-                
+
                 self.current_coins = self.calculate_coins()
             
             # 2.3.8. Save game
@@ -69,11 +73,31 @@ class GameManager():
         return self.starting_coins - len(self.map.map) + sum([building.calculate_coins(self.map) for building in self.map.map.values()])
 
     def save_game(self):
-        savefile = open("./map.csv", "w")
-        savefile.write(str(map))
-    
+        with open("map.csv", 'w', newline='') as f:
+            writer = csv.writer(f)
+            for row in self.map.map.items():
+                writer.writerow(row)
+        print("Game successfully saved!")
+
     def load_game(self):
-        pass
+        with open("map.csv", mode = "r") as f:
+            reader = csv.reader(f)
+            for rows in reader:
+                position = ast.literal_eval(str(rows[0]))
+                location = (rows[1])[-18:]
+                if "Residential" in rows[1]:
+                    building = Residential(location)
+                elif "Industry" in rows[1]:
+                    building = Industry(location)
+                elif "Commercial" in rows[1]:
+                    building = Commercial(location)
+                elif "Park" in rows[1]:
+                    building = Park(location)
+                else:
+                    building = Road(location)
+                self.map.map.update({position:building})
+        self.playGame()
+
     
     def displayhighScores(self):
         # 4.1. Display high scores menu  

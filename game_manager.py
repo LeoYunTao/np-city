@@ -59,6 +59,7 @@ class GameManager():
             writer = csv.writer(f)
             for row in self.map.map.items():
                 writer.writerow(row)
+        print("Game successfully saved!")
 
     def load_game(self):
         with open("map.csv", mode = "r") as f:
@@ -77,7 +78,6 @@ class GameManager():
                 else:
                     building = Road(location)
                 self.map.map.update({position:building})
-        print(self.map.map)
         self.playGame()
 
     
